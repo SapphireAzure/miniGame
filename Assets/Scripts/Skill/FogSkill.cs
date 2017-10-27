@@ -36,9 +36,13 @@ public class FogSkill : Skill
 
     public override void PlaySkill(Player player)
     {
+        if(NextColdTime<=0)
+        {
+            NextColdTime = ColdTime;
+            Debug.Log(player.transform.position);
+            GameObject spriteInstance = Instantiate(skillSprite, player.transform.position, player.transform.rotation);
+            spriteInstance.GetComponent<FogSkillSpriteControl>().SetSkill(this);
 
-        Debug.Log(player.transform.position);
-        GameObject spriteInstance = Instantiate(skillSprite, player.transform.position, player.transform.rotation);
-        spriteInstance.GetComponent<FogSkillSpriteControl>().SetSkill(this);
+        }
     }
 }

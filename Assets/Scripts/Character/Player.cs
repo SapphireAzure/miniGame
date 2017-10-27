@@ -30,7 +30,8 @@ public class Player : MonoBehaviour
     public PlayerSkillSystem skillSystem;
     //检测地面用射击直线
     public Transform groundCheck;
-
+    //目前脚底下的Item属性
+    private Collider2D NowItem;
 
     // Use this for initialization
     void Start ()
@@ -52,7 +53,7 @@ public class Player : MonoBehaviour
             //先进行地面检测
             gt.GroundTrig(ground);
             //如果在跳跃过程中要无视
-            if (Input.GetKeyDown("w"))
+            if (Input.GetKeyDown(KeyCode.W))
             {
                 CanJump = true;
             }
@@ -65,7 +66,16 @@ public class Player : MonoBehaviour
         {
             skillSystem.PlaySkill(1, this);
         }
-
+        //捡取道具
+        if(NowItem)
+        {
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                skillSystem.SetSkill(NowItem.GetComponent<SkillItem>().skillName);
+                Destroy(NowItem);
+                NowItem = null;
+            }
+        }
     }
 
     /*
@@ -124,5 +134,20 @@ public class Player : MonoBehaviour
         }
     }
 
-
+    //进入Trigger得到trigger类型
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "SkillItem")
+        {
+            NowItem = other;
+        }
+    }
+    //当出了Item Trigger时应当取消绑定
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(NowItem)
+        {
+            NowItem = null;
+        }
+    }
 }
