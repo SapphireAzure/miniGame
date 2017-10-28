@@ -12,15 +12,21 @@ public class PlayerSkillSystem : MonoBehaviour
     public Skill[] skills = new Skill[4];
 
     public void Start()
-    {
+    {;
         skills[0] = gameObject.AddComponent<BaseSkill>();
-        skills[1] = gameObject.AddComponent<FogSkill>();
     }
 
     //技能系统调用 输入一个index表示位置
     public void PlaySkill(int index,Player player)
     {
-        skills[index].PlaySkill(player);
+        if(skills[index])
+        {
+            skills[index].PlaySkill(player);
+        }
+        else
+        {
+            Debug.Log("技能还未空中！");
+        }
     }
 
     //这个一直监控更新技能管理器下面的技能
@@ -31,4 +37,32 @@ public class PlayerSkillSystem : MonoBehaviour
 
         }
     }
+
+    //技能系统跟据Item生成对应的技能
+    public void SetSkill(SkillName skillName)
+    {
+        Skill targetSkill = null;
+        switch (skillName)
+        {
+            case SkillName.FogSkill:
+                targetSkill = gameObject.AddComponent<FogSkill>();
+                break;
+            case SkillName.ThunderSkill:
+                targetSkill = gameObject.AddComponent<FogSkill>();
+                break;
+
+        }
+        if(targetSkill)
+        {
+            for (int i = 0;i<skills.Length;i++)
+            {
+                if(skills[i]==null)
+                {
+                    skills[i] = targetSkill;
+                }
+            }
+        }
+
+    }
+
 }

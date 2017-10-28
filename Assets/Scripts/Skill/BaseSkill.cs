@@ -43,9 +43,12 @@ public class BaseSkill : Skill
 
     public override void PlaySkill(Player player)
     {
-        
-        GameObject spriteInstance = Instantiate(skillSprite, player.transform.position, player.transform.rotation);
-        spriteInstance.GetComponent<BaseSkillSpriteControl>().SetSkill(this);
-        spriteInstance.GetComponent<BaseSkillSpriteControl>().SetPlayerReference(player.isFacingRight, player.transform.position);
+        if(NextColdTime<=0)
+        {
+            NextColdTime = ColdTime;
+            GameObject spriteInstance = Instantiate(skillSprite, player.transform.position, player.transform.rotation);
+            spriteInstance.GetComponent<BaseSkillSpriteControl>().SetSkill(this);
+            spriteInstance.GetComponent<BaseSkillSpriteControl>().SetPlayerReference(player.isFacingRight, player.transform.position);
+        } 
     }
 }
