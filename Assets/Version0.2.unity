@@ -184,7 +184,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 217843221}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -478.5, y: -319, z: 0}
+  m_LocalPosition: {x: -478, y: -318.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1955636050}
@@ -229,7 +229,7 @@ MonoBehaviour:
   VerticalAxisName: Vertical
   HideOnRelease: 0
   MoveBase: 0
-  SnapsToFinger: 1
+  SnapsToFinger: 0
   JoystickMoveAxis: 3
   JoystickBase: {fileID: 1955636051}
   Stick: {fileID: 605594201}
@@ -270,7 +270,7 @@ GameObject:
   - component: {fileID: 253065624}
   - component: {fileID: 253065623}
   - component: {fileID: 253065622}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: land
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 426320419
+  m_SortingLayerID: 862923081
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -847,8 +847,10 @@ GameObject:
   - component: {fileID: 645803888}
   - component: {fileID: 645803887}
   - component: {fileID: 645803886}
+  - component: {fileID: 645803890}
+  - component: {fileID: 645803891}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: ControlCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -918,13 +920,13 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 645803885}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 478.5, y: 319, z: 0}
+  m_LocalPosition: {x: 478, y: 318.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 217843222}
-  - {fileID: 1253834101}
   - {fileID: 1175436289}
   - {fileID: 1685670631}
+  - {fileID: 1253834101}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -933,6 +935,39 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &645803890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 645803885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f79bdcbc1dea046b9d4de8b955f03a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontal: 0
+  vertical: 0
+  attack: 0
+  jump: 0
+  skill: 0
+--- !u!114 &645803891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 645803885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aba8146d48157c4ea171334aaecf6cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackButton: {fileID: 1175436290}
+  skillButton: {fileID: 1685670632}
+  jumpButton: {fileID: 1253834102}
+  attackKeyCode: 106
+  skillKeyCode: 107
+  jumpKeyCode: 32
 --- !u!1 &949348413
 GameObject:
   m_ObjectHideFlags: 0
@@ -1147,7 +1182,7 @@ GameObject:
   - component: {fileID: 1175436291}
   - component: {fileID: 1175436290}
   m_Layer: 5
-  m_Name: Attack
+  m_Name: AttackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1161,11 +1196,11 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1175436288}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 398.5, y: -250, z: 0}
+  m_LocalPosition: {x: 398, y: -249.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 645803889}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1184,7 +1219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f80d719f998a67438e69f9f995732ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ButtonName: Jump
+  ButtonName: Attack
 --- !u!114 &1175436291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1246,11 +1281,11 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1253834100}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 292.5, y: -250, z: 0}
+  m_LocalPosition: {x: 292, y: -249.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 645803889}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1474,11 +1509,11 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1685670630}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 398.5, y: -146.5, z: 0}
+  m_LocalPosition: {x: 398, y: -146, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 645803889}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1497,7 +1532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f80d719f998a67438e69f9f995732ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ButtonName: Jump
+  ButtonName: Skill
 --- !u!114 &1685670633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1620,7 +1655,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 862923081
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 3fb5e5483b4ac3f429fa5b541ece6691, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
