@@ -11,7 +11,8 @@ public enum myKeyCode {
     Jump,
 }
 
-public class InputConverter : MonoBehaviour {
+public class InputConverter : MonoBehaviour
+{
     /* 这个类提供统一的按键查询接口
      * 接受对按键的查询，统一键盘和虚拟手柄的输入
      */
@@ -22,7 +23,8 @@ public class InputConverter : MonoBehaviour {
     public KeyCode skillKeyCode;
     public KeyCode jumpKeyCode;
 
-    public float GetAxis(myKeyCode keyCode) {
+    public float GetAxis(myKeyCode keyCode)
+    {
         //返回控制移动的左摇杆
         switch (keyCode) {
             case myKeyCode.Horizontal:

@@ -23,23 +23,23 @@ public class GroundTrigger
             Tile.TileType tileType = targetObject.GetTileType();
             if (tileType == Tile.TileType.PLAIN)
             {
-                quality.reset();
+                quality.PropertyReset();
             }
             else if (tileType == Tile.TileType.GRASS)
             {
-                quality.reset();
+                quality.PropertyReset();
                 quality.DownSpeed();
                 quality.dodge = 15;
             }
             else if (tileType == Tile.TileType.ICE)
             {
-                quality.reset();
+                quality.PropertyReset();
                 quality.UpSpeed();
                 quality.attack += 1;
             }
             else if (tileType == Tile.TileType.SWAMP)
             {
-                quality.reset();
+                quality.PropertyReset();
                 quality.DownSpeed();
                 quality.defend -= 1;
             }
@@ -50,7 +50,7 @@ public class GroundTrigger
         }
         else
         {
-            quality.reset();
+            quality.PropertyReset();
         }
         
     }

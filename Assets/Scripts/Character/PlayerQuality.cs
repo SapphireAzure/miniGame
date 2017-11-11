@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //该类放在Player下为player相关的各种属性值
+//有的起到记录有的起到约束作用
 [System.Serializable]
 public class PlayerQuality
 {
@@ -20,17 +21,21 @@ public class PlayerQuality
     public int attack;
     //角色防御力
     public int defend;
+    //水平受力大小
+    public float moveForce = 365f;
+    //竖直受力大小
+    public float jumpForce = 500;
 
 
     public PlayerQuality()
     {
-        reset();
-    }
-    //将quality数值回复
-    public void reset()
-    {
         maxHp = 100;
         HP = 100;
+        PropertyReset();
+    }
+    //将quality数值回复
+    public void PropertyReset()
+    {
         speedLevel = 1;
         dodge = 0;
         attack = 0;

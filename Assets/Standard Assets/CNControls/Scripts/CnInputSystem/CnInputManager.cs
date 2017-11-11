@@ -56,7 +56,7 @@ namespace CnControls
         }
 
         /// <summary>
-        /// GetAxis method for getting current values for any desired axis
+        /// GetAxis 方法用来得到任意需要轴的现在值 调用了下面的GetAxis
         /// </summary>
         /// <param name="axisName">The name of the axis to get value from</param>
         /// <returns>
@@ -69,7 +69,7 @@ namespace CnControls
         }
 
         /// <summary>
-        /// "Copy" of the Input.GetAxisRaw method
+        /// "Copy" of the Input.GetAxisRaw method 是Input.GetAxisRaw的复制 调用了下面的GetAxis
         /// </summary>
         /// <param name="axisName">The name of the axis to get value from</param>
         /// <returns>
@@ -82,7 +82,7 @@ namespace CnControls
         }
 
         /// <summary>
-        /// Common private method for getting the axis values
+        /// 共同的私有方法来的到轴值
         /// </summary>
         /// <param name="axisName">The name of the axis to get value from</param>
         /// <param name="isRaw">Whether the method sould return the raw value of the axis</param>
@@ -264,7 +264,7 @@ namespace CnControls
         }
 
         /// <summary>
-        /// Private method that get's the value of the first non-zero virtual axis, registered with the specified name
+        /// 私有方法来得到第一个非0虚拟轴，该轴要注册为特殊的名字
         /// </summary>
         /// <param name="virtualAxisList">List of virtual axis to search through</param>
         /// <param name="axisName">Name of the axis (for the standard Input behaviour)</param>

@@ -46,9 +46,10 @@ public class BaseSkill : Skill
         if(NextColdTime<=0)
         {
             NextColdTime = ColdTime;
-            GameObject spriteInstance = Instantiate(skillSprite, player.transform.position, player.transform.rotation);
+            Transform site = player.Launcher.transform;
+            GameObject spriteInstance = Instantiate(skillSprite, site.position, site.rotation);
             spriteInstance.GetComponent<BaseSkillSpriteControl>().SetSkill(this);
-            spriteInstance.GetComponent<BaseSkillSpriteControl>().SetPlayerReference(player.isFacingRight, player.transform.position);
+            spriteInstance.GetComponent<BaseSkillSpriteControl>().SetPlayerReference(player.isFacingRight, site.position, site.rotation);
         } 
     }
 }

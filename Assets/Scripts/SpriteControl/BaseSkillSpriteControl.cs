@@ -10,6 +10,8 @@ public class BaseSkillSpriteControl : MonoBehaviour
     BaseSkill baseSkill;
     bool facingRight;
     Vector3 position;
+    Quaternion quaternion;
+
     // Use this for initialization
     void Start ()
     {
@@ -23,16 +25,31 @@ public class BaseSkillSpriteControl : MonoBehaviour
             Rigidbody2D rb2D = GetComponent<Rigidbody2D>();
             if (rb2D != null)
             {
-                float speed = 0;
-                if(facingRight)
+                float xSpeed;
+                float ySpeed;
+                if (quaternion.x==0&&quaternion.y==0)
                 {
-                    speed = baseSkill.speed;
+                    if(facingRight)
+                    {
+                        xSpeed = baseSkill.speed;
+                        ySpeed = 0;
+                    }
+                    else
+                    {
+                        xSpeed = -baseSkill.speed;
+                        ySpeed = 0;
+                    }
+                    
                 }
                 else
                 {
-                    speed = -baseSkill.speed;
+                    xSpeed = quaternion.x / Mathf.Sqrt(quaternion.x * quaternion.x + quaternion.y * quaternion.y) * baseSkill.speed;
+                    ySpeed = quaternion.y / Mathf.Sqrt(quaternion.x * quaternion.x + quaternion.y * quaternion.y) * baseSkill.speed;
                 }
-                rb2D.velocity = new Vector2(speed, 0);
+                
+
+
+                rb2D.velocity = new Vector2(xSpeed, ySpeed);
             }
             //超过距离范围摧毁这个
             if (Vector3.Distance(transform.position, position) > baseSkill.distance)
@@ -40,21 +57,31 @@ public class BaseSkillSpriteControl : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-
-        
-        
     }
 
-    //设定这个实例的各种参数
+
+    //这个动画效果本身是一个trigger 碰到其他如
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag=="Enemy")
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+
+    //设定这个实例相关技能各种参数
     public void SetSkill(BaseSkill s)
     {
         this.baseSkill = s;
         
     }
 
-    public void SetPlayerReference(bool facingRight,Vector3 position)
+    //跟这个动画产生位置相关属性
+    public void SetPlayerReference(bool facingRight, Vector3 position, Quaternion quaternion)
     {
         this.facingRight = facingRight;
         this.position = position;
+        this.quaternion = new Quaternion(quaternion.x,quaternion.y,quaternion.z,quaternion.w);
     }
 }

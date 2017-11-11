@@ -16,25 +16,25 @@ public class HpUpdate : MonoBehaviour {
 	float maxHp;
 
 	// Use this for initialization
-	void Start () {
-		//暂时无法绑定player的quality..
-		playerQuality = new PlayerQuality();
-	
-		maxHp = playerQuality.maxHp;
+	void Start ()
+    {
 
-		currentHp = playerQuality.HP;
-
-		hpBar.size = currentHp / maxHp;
-
+        playerQuality = GameObject.Find("Player").GetComponent<Player>().quality;
+        set();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		maxHp = playerQuality.maxHp;
+	void Update (){
+        set();
+    }
 
-		currentHp = playerQuality.HP;
-			
-		hpBar.size = currentHp / maxHp;
-		
-	}
+    //HP的更新数值设定
+    private void set()
+    {
+        maxHp = playerQuality.maxHp;
+
+        currentHp = playerQuality.HP;
+
+        hpBar.size = currentHp / maxHp;
+    }
 }

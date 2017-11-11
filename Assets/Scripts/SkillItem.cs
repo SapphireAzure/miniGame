@@ -22,7 +22,17 @@ public class SkillItem : MonoBehaviour
         //系统自动选取当前时间为种子
         System.Random random = new System.Random();
         SkillName skillName = names[random.Next(1,1)];
-        Debug.Log("Name is " + skillName);
+    }
+
+    //进入Trigger得到trigger类型
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            PlayerQuality pq= other.GetComponent<Player>().quality;
+            pq.HP -= 50;
+            return;
+        }
     }
 }
 

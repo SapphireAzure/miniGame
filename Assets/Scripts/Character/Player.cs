@@ -4,67 +4,78 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    //水平受力大小
-    public float moveForce = 365f;
-    //竖直受力大小
-    public float jumpForce = 1000f;
+
     //前面的ground 将collision复位
     private RaycastHit2D formorGround;
     //角色脚下的collider
     private RaycastHit2D ground;
     
-    //隐藏是否面朝右边 图片默认朝向左边
+    //是否面朝右边 图片默认朝向左边
     public bool isFacingRight = false;
-    //隐藏是否在跳跃
+    //隐藏 是否在跳跃
     [HideInInspector]
     public bool CanJump = false;
-    //隐藏是否主动下落
+    //隐藏 是否主动下落
     public bool WillDrop = false;
+    //标记目标是否在下蹲状态
+    public bool IsSquatting = false;
+    //发射器 跟子弹技能方向相关
+    public Transform Launcher = null;
 
     //跟游戏内容相关部分
     //角色数值
     public PlayerQuality quality;
+    //角色控制部分
+    private PlayerController controller;
     //地面检测
-    public GroundTrigger gt;
+    public GroundTrigger gt = null;
     //技能列表
-    public PlayerSkillSystem skillSystem;
+    public PlayerSkillSystem skillSystem = null;
     //检测地面用射击直线
-    public Transform groundCheck;
-    //目前脚底下的Item属性
+    public Transform groundCheck = null;
+    //目前碰到的Item属性
     private Collider2D NowItem;
+    //绑定的动画组件
+    private Animator anim;
+
 
     // Use this for initialization
     void Start ()
     {
+        //跟一些游戏中的组件绑定
         groundCheck = transform.Find("GroundCheck");
+        Launcher = transform.Find("Launcher");
         skillSystem = gameObject.AddComponent<PlayerSkillSystem>();
+        //动画器绑定
+        anim = GetComponent<Animator>();
+        //封装一些角色数值的东西
         quality = new PlayerQuality();
+        //为角色对象则初始化控制组件
+        if(this.tag=="Player")
+        {
+            //从canvas获取得到InputCommond脚本的实例组件
+            controller = new PlayerController(GameObject.Find("ControlCanvas").GetComponent<InputCommand>(), this);
+        }
+        else
+        {
+            controller = null;
+        }
+        //地面监测模块
         gt = new GroundTrigger(this);
-        
-	}
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
         ground = Physics2D.Linecast(transform.position, groundCheck.position, LayerMask.GetMask("Ground"));
         skillSystem.Check();
-        if(ground == true)
+        //技能控制器控制释放技能
+        controller.SpellSkill();
+        //先进行地面检测
+        if (ground == true)
         {
-            //先进行地面检测
             gt.GroundTrig(ground);
-            //如果在跳跃过程中要无视
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                CanJump = true;
-            }
-        }
-        if(Input.GetKeyDown("j"))
-        {
-            skillSystem.PlaySkill(0,this);
-        }
-        if(Input.GetKeyDown("k"))
-        {
-            skillSystem.PlaySkill(1, this);
+            CanJump = true;
         }
         //捡取道具
         if(NowItem)
@@ -72,65 +83,33 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.M))
             {
                 skillSystem.SetSkill(NowItem.GetComponent<SkillItem>().skillName);
-                Destroy(NowItem);
+                Destroy(NowItem.gameObject);
                 NowItem = null;
             }
         }
+        //生命值为0销毁
+        if (quality.HP <= 0)
+        {
+            Destroy(gameObject);
+        }
+        //判断是否进入下蹲状态
+        if(controller.IsSquat())
+        {
+            anim.SetBool("IsSquatting", true);
+        }
+        else
+        {
+            anim.SetBool("IsSquatting", false);
+        }
     }
 
-    /*
-     * 这个函数负责翻转图像
-     */
-    private void Flip()
-    {
-        isFacingRight = !isFacingRight;
-        Vector3 innerScale = transform.localScale;
-        innerScale.x *= -1;
-        transform.localScale = innerScale;
-    }
 
     private void FixedUpdate()
     {
-        BaseControl();
-    }
-
-    //游戏中的基础 移动控制
-    private void BaseControl()
-    {
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if(rb !=null)
+        controller.Move();
+        if(transform.localScale.x<0)
         {
-            float h = 0;
-            if (Input.GetKey("a"))
-            {
-                h = -0.1f;
-            }
-            if (Input.GetKey("d"))
-            {
-                h = 0.1f;
-            }
-            //处理速度问题 注意有正负号关系
-            if (h * rb.velocity.x < quality.GetSpeed())
-            {
-                rb.AddForce(Vector2.right * h * moveForce);
-            }
-            if (Mathf.Abs(rb.velocity.x) > quality.GetSpeed())
-            {
-                rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * quality.GetSpeed(), rb.velocity.y);
-            }
-            if (h > 0 && !isFacingRight) Flip();
-            else if (h < 0 && isFacingRight) Flip();
-            if (CanJump)
-            {
-                rb.AddForce(new Vector2(0f, jumpForce));
-                CanJump = false;
-            }
-            if (WillDrop)
-            {
-                formorGround = ground;
-                Physics2D.IgnoreCollision(this.GetComponent<Collider2D>(), ground.collider, true);
-                WillDrop = false;
-            }
+            Debug.Log(transform.localScale);
         }
     }
 

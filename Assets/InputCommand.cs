@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputCommand: MonoBehaviour {
+public class InputCommand: MonoBehaviour
+{
     public float horizontal;
     public float vertical;
     public bool attack;
     public bool jump;
     public bool skill;
     
-    void Update() {
+    void Update()
+    {
         horizontal = GetComponent<InputConverter>().GetAxis(myKeyCode.Horizontal);
         vertical = GetComponent<InputConverter>().GetAxis(myKeyCode.Vertical);
         attack = GetComponent<InputConverter>().GetKey(myKeyCode.Attack);
