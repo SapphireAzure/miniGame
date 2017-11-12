@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
     public PlayerQuality quality;
     //角色控制部分
     private PlayerController controller;
+    //角色属性控制
+
     //地面检测
     public GroundTrigger gt = null;
     //技能列表

@@ -9,7 +9,7 @@ public class CameraMovement : MonoBehaviour
     //player到camera之间的向量 偏移量
     private Vector3 offset;
     //
-    public float smothing = 0f;
+    public float smothing = 1f;
 
     private void Awake()
     {
@@ -30,18 +30,8 @@ public class CameraMovement : MonoBehaviour
         //确认目标角色存在
         if(player!=null)
         {
-            //canjump说明在地面上那么镜头应该要往上一点
-            if (player.GetComponent<Player>().CanJump)
-            {
-                Vector3 targetCampos = player.position + offset;
-                transform.position = Vector3.Lerp(transform.position, targetCampos, smothing * Time.deltaTime);
-            }
-            else
-            {
-                Vector3 targetCampos = player.position + offset;
-                transform.position = Vector3.Lerp(transform.position, targetCampos, smothing * Time.deltaTime);
-            }
-            
+            Vector3 targetCampos = player.position + offset;
+            transform.position = Vector3.Lerp(transform.position, targetCampos, smothing*Time.deltaTime);
         }
         
     }
