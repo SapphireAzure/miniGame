@@ -12,8 +12,9 @@ public class PlayerSkillSystem : MonoBehaviour
     public Skill[] skills = new Skill[4];
 
     public void Start()
-    {;
+    {
         skills[0] = gameObject.AddComponent<BaseSkill>();
+        skills[1] = gameObject.AddComponent<PassiveSplashSkill>();
     }
 
     //技能系统调用 输入一个index表示位置
@@ -21,20 +22,26 @@ public class PlayerSkillSystem : MonoBehaviour
     {
         if(skills[index])
         {
-            skills[index].PlaySkill(player);
+            skills[index].PlaySkill();
         }
         else
         {
-            Debug.Log("技能还未空中！");
+            Debug.Log("技能还为空！");
         }
     }
 
     //这个一直监控更新技能管理器下面的技能
-    public void Check()
+    public void Check(Transform effectSite)
     {
         foreach (Skill s in skills)
         {
-
+            //技能不为空且为被动技能
+            if(s!=null&&!s.isActive)
+            {
+                //将技能转化为子类来调用 （为了后面继续扩展准备）
+                PassiveSplashSkill pss = s as PassiveSplashSkill;
+                pss.SkillEffect(effectSite);
+            }
         }
     }
 
@@ -52,6 +59,7 @@ public class PlayerSkillSystem : MonoBehaviour
                 break;
 
         }
+        //如果确定有其技能
         if(targetSkill)
         {
             for (int i = 0;i<skills.Length;i++)
@@ -62,7 +70,6 @@ public class PlayerSkillSystem : MonoBehaviour
                 }
             }
         }
-
     }
 
 }

@@ -7,7 +7,7 @@ public class BaseSkill : Skill
 {
     //都有继承一个Gameobject为创建prefab
     //都有集成一个isActive为是否主动技能
-
+    //该机鞥呢所独有的一些属性
     //伤害
     public int damage = 2;
     //速度
@@ -24,8 +24,10 @@ public class BaseSkill : Skill
 
     private void Start()
     {
-        this.isActive = true;
-        this.skillSprite = Resources.Load("Prefabs/Skill/BaseSkillSprite") as GameObject;
+        ID = "BaseSkill";
+        isActive = true;
+        skillSprite = Resources.Load("Prefabs/Skill/BaseSkillSprite") as GameObject;
+        owner = GetComponent<Player>();
     }
 
     // Update is called once per frame
@@ -41,15 +43,19 @@ public class BaseSkill : Skill
         }
 	}
 
-    public override void PlaySkill(Player player)
+    public override void PlaySkill()
     {
         if(NextColdTime<=0)
         {
             NextColdTime = ColdTime;
-            Transform site = player.Launcher.transform;
+            Transform site = owner.Launcher.transform;
             GameObject spriteInstance = Instantiate(skillSprite, site.position, site.rotation);
             spriteInstance.GetComponent<BaseSkillSpriteControl>().SetSkill(this);
-            spriteInstance.GetComponent<BaseSkillSpriteControl>().SetPlayerReference(player.isFacingRight, site.position, site.rotation);
+            spriteInstance.GetComponent<BaseSkillSpriteControl>().SetPlayerReference(owner.isFacingRight, site.position, site.rotation);
         } 
+    }
+
+    public override void SkillEffect(Transform effectSite)
+    {
     }
 }

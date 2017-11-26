@@ -15,6 +15,10 @@ public class SkillItem : MonoBehaviour
 {
     public SkillName skillName = 0;
 
+    //用item来测试技能效果用HP
+    public int HP = 100;
+
+
     //update前第一次调用 设置一个skillname值
     private void Start()
     {
@@ -29,8 +33,6 @@ public class SkillItem : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            PlayerQuality pq= other.GetComponent<Player>().quality;
-            pq.HP -= 50;
             return;
         }
     }

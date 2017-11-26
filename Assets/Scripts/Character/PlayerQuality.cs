@@ -22,15 +22,17 @@ public class PlayerQuality
     //角色防御力
     public int defend;
     //水平受力大小
-    public float moveForce = 365f;
+    public float moveForce;
     //竖直受力大小
-    public float jumpForce = 500;
+    public float jumpForce;
 
 
     public PlayerQuality()
     {
         maxHp = 100;
         HP = 100;
+        jumpForce = 500;
+        moveForce = 365f;
         PropertyReset();
     }
     //将quality数值回复

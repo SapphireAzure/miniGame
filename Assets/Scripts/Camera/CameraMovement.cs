@@ -13,7 +13,7 @@ public class CameraMovement : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.FindWithTag("Player").transform;
+        player = transform;
         offset = transform.position - player.position;
     }
 

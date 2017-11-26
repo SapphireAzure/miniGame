@@ -19,7 +19,7 @@ public class HpUpdate : MonoBehaviour {
 	void Start ()
     {
 
-        playerQuality = GameObject.Find("Player").GetComponent<Player>().quality;
+        playerQuality = GetComponentInParent<Player>().quality;
         set();
 	}
 	

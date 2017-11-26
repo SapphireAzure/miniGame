@@ -17,6 +17,7 @@ public class FogSkill : Skill
     // Use this for initialization
     void Start()
     {
+        ID = "FogSkill";
         this.isActive = true;
         this.skillSprite = Resources.Load("Prefabs/Skill/FogSkillSprite") as GameObject;
     }
@@ -34,15 +35,19 @@ public class FogSkill : Skill
         }
     }
 
-    public override void PlaySkill(Player player)
+    public override void PlaySkill()
     {
         if(NextColdTime<=0)
         {
             NextColdTime = ColdTime;
-            Debug.Log(player.transform.position);
-            GameObject spriteInstance = Instantiate(skillSprite, player.transform.position, player.transform.rotation);
+            Debug.Log(owner.transform.position);
+            GameObject spriteInstance = Instantiate(skillSprite, owner.transform.position, owner.transform.rotation);
             spriteInstance.GetComponent<FogSkillSpriteControl>().SetSkill(this);
 
         }
+    }
+
+    public override void SkillEffect(Transform effectSite)
+    {
     }
 }
