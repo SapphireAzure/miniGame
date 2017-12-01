@@ -58,10 +58,10 @@ public class BaseSkillSpriteControl : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         //为敌人触发
-        if(other.tag=="Enemy")
+        if(other.tag=="Player" && !other.GetComponent<Player>().isLocalPlayer)
         {
             //用个小物件测试效果
-            SkillItem temp=other.GetComponent<SkillItem>();
+            PlayerQuality temp=other.GetComponent<Player>().quality;
             //调用技能拥有者 技能系统下的检查来调用被动技能buff
             baseSkill.owner.skillSystem.Check(other.transform);
             temp.HP -= baseSkill.damage;
@@ -78,10 +78,10 @@ public class BaseSkillSpriteControl : MonoBehaviour
     }
 
     //跟这个动画产生位置相关属性
-    public void SetPlayerReference(bool facingRight, Vector3 position, Quaternion quaternion)
+    public void SetPlayerReference(bool facingRight, Vector3 position, Vector2 direction)
     {
         this.facingRight = facingRight;
         this.position = position;
-        this.direction = new Vector2(quaternion.x,quaternion.y);
+        this.direction = new Vector2(direction.x, direction.y);
     }
 }

@@ -10,7 +10,7 @@ namespace CnControls
     public class SimpleButton : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
     {
         /// <summary>
-        /// The name of the button
+        /// 按键的名称 默认Jump 在unity视图中进行命名修改
         /// </summary>
         public string ButtonName = "Jump";
 

@@ -43,11 +43,13 @@ public class PlayerCheck : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        int layer = 0;
+        layer |= LayerMask.GetMask("Ground");
         //时刻检测并更新四周的接触情况
-        ground = Physics2D.Linecast(transform.position, groundCheck.position, LayerMask.GetMask("Ground"));
-        back = Physics2D.Linecast(transform.position, backCheck.position, LayerMask.GetMask("Ground"));
-        front = Physics2D.Linecast(transform.position, frontCheck.position, LayerMask.GetMask("Ground"));
-        top= Physics2D.Linecast(transform.position, topCheck.position, LayerMask.GetMask("Ground"));
+        ground = Physics2D.Linecast(transform.position, groundCheck.position, layer);
+        back = Physics2D.Linecast(transform.position, backCheck.position, layer);
+        front = Physics2D.Linecast(transform.position, frontCheck.position, layer);
+        top= Physics2D.Linecast(transform.position, topCheck.position, layer);
         GroundTrig();
     }
 

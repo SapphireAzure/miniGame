@@ -156,7 +156,6 @@ namespace CnControls
             _stickTransform.position = worldJoystickPosition;
             // We then query it's anchored position. It's calculated internally and quite tricky to do from scratch here in C#
             var stickAnchoredPosition = _stickTransform.anchoredPosition;
-
             // Some bitwise logic for constraining the joystick along one of the axis
             // If the "Both" option was selected, non of these two checks will yield "true"
             if ((JoystickMoveAxis & ControlMovementDirection.Horizontal) == 0)
@@ -167,9 +166,13 @@ namespace CnControls
             {
                 stickAnchoredPosition.y = _intermediateStickPosition.y;
             }
+            //针对情况一个简单的bug修复处理 后面有时间情况可以在修改
+            if(stickAnchoredPosition.x>250)
+            {
+                stickAnchoredPosition.x = _intermediateStickPosition.x;
+            }
 
             _stickTransform.anchoredPosition = stickAnchoredPosition;
-
             // Find current difference between the previous central point of the joystick and it's current position
             Vector2 difference = new Vector2(stickAnchoredPosition.x, stickAnchoredPosition.y) - _intermediateStickPosition;
 
@@ -177,7 +180,7 @@ namespace CnControls
             var diffMagnitude = difference.magnitude;
             var normalizedDifference = difference / diffMagnitude;
 
-            // If the joystick is being dragged outside of it's range
+            // 如果被拉到了圆盘范围之外
             if (diffMagnitude > MovementRange)
             {
                 if (MoveBase && SnapsToFinger)
@@ -193,7 +196,6 @@ namespace CnControls
                     _stickTransform.anchoredPosition = _intermediateStickPosition + normalizedDifference * MovementRange;
                 }
             }
-
             // We should now calculate axis values based on final position and not on "virtual" one
             var finalStickAnchoredPosition = _stickTransform.anchoredPosition;
             // Sanity recalculation

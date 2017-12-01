@@ -110,7 +110,7 @@ namespace CnControls
         }
 
         /// <summary>
-        /// Method for retrieval of the desired button pressed state
+        /// 该方法用来检索所需按键的按压状态
         /// </summary>
         /// <param name="buttonName">The name of the desired button</param>
         /// <returns>Is the button being currently pressed?</returns>

@@ -25,20 +25,25 @@ public class PlayerQuality
     public float moveForce;
     //竖直受力大小
     public float jumpForce;
-
+    //角色视角大小
+    public int sightAngular;
+    //角色获得技能的速度
+    public float skillGetTime;
 
     public PlayerQuality()
     {
-        maxHp = 100;
-        HP = 100;
+        maxHp = 10;
+        HP = 10;
         jumpForce = 500;
         moveForce = 365f;
+        skillGetTime = 4;
+        sightAngular = 72;
         PropertyReset();
     }
-    //将quality数值回复
+    //将quality数值回复 注意地形check要不断调用修改数值
     public void PropertyReset()
     {
-        speedLevel = 1;
+        speedLevel = 1;  
         dodge = 0;
         attack = 0;
         defend = 0;

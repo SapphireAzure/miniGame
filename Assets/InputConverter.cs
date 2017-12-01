@@ -7,7 +7,8 @@ public enum myKeyCode {
     Horizontal,//横向偏移
     Vertical,//纵向偏移
     Attack,
-    Skill,
+    Skill1,
+    Skill2,
     Jump,
 }
 
@@ -17,11 +18,15 @@ public class InputConverter : MonoBehaviour
      * 接受对按键的查询，统一键盘和虚拟手柄的输入
      */
     public SimpleButton attackButton;
-    public SimpleButton skillButton;
+    public SimpleButton skill1Button;
+    public SimpleButton skill2Button;
     public SimpleButton jumpButton;
+    
     public KeyCode attackKeyCode;
-    public KeyCode skillKeyCode;
+    public KeyCode skill1KeyCode;
+    public KeyCode skill2KeyCode;
     public KeyCode jumpKeyCode;
+    
 
     public float GetAxis(myKeyCode keyCode)
     {
@@ -52,8 +57,10 @@ public class InputConverter : MonoBehaviour
                 return CnInputManager.GetButtonDown(attackButton.ButtonName) || Input.GetKeyDown(attackKeyCode);
             case myKeyCode.Jump:
                 return CnInputManager.GetButtonDown(jumpButton.ButtonName) || Input.GetKeyDown(jumpKeyCode);
-            case myKeyCode.Skill:
-                return CnInputManager.GetButtonDown(skillButton.ButtonName) || Input.GetKeyDown(skillKeyCode);
+            case myKeyCode.Skill1:
+                return CnInputManager.GetButtonDown(skill1Button.ButtonName) || Input.GetKeyDown(skill1KeyCode);
+            case myKeyCode.Skill2:
+                return CnInputManager.GetButtonDown(skill2Button.ButtonName) || Input.GetKeyDown(skill2KeyCode);
         }
         return false;
     }
@@ -63,8 +70,10 @@ public class InputConverter : MonoBehaviour
                 return CnInputManager.GetButtonUp(attackButton.ButtonName) || Input.GetKeyUp(attackKeyCode);
             case myKeyCode.Jump:
                 return CnInputManager.GetButtonUp(jumpButton.ButtonName) || Input.GetKeyUp(jumpKeyCode);
-            case myKeyCode.Skill:
-                return CnInputManager.GetButtonUp(skillButton.ButtonName) || Input.GetKeyUp(skillKeyCode);
+            case myKeyCode.Skill1:
+                return CnInputManager.GetButtonUp(skill1Button.ButtonName) || Input.GetKeyUp(skill1KeyCode);
+            case myKeyCode.Skill2:
+                return CnInputManager.GetButtonUp(skill2Button.ButtonName) || Input.GetKeyUp(skill2KeyCode);
         }
         return false;
     }
@@ -74,8 +83,10 @@ public class InputConverter : MonoBehaviour
                 return CnInputManager.GetButton(attackButton.ButtonName) || Input.GetKey(attackKeyCode);
             case myKeyCode.Jump:
                 return CnInputManager.GetButton(jumpButton.ButtonName) || Input.GetKey(jumpKeyCode);
-            case myKeyCode.Skill:
-                return CnInputManager.GetButton(skillButton.ButtonName) || Input.GetKey(skillKeyCode);
+            case myKeyCode.Skill1:
+                return CnInputManager.GetButton(skill1Button.ButtonName) || Input.GetKey(skill1KeyCode);
+            case myKeyCode.Skill2:
+                return CnInputManager.GetButton(skill2Button.ButtonName) || Input.GetKey(skill2KeyCode);
         }
         return false;
     }

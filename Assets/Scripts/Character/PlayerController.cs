@@ -22,11 +22,12 @@ public class PlayerController : NetworkBehaviour
     //一个墙壁旁边连续跳跃时间限制
     private float wallJumpTime = 2f;
 
+    int count = 0;
 
     private void Awake()
     {
         //找到GUI面板
-        this.command = transform.Find(Tags.ControllCanvas).GetComponent<InputCommand>();
+        this.command = transform.Find("ControlCanvas").GetComponent<InputCommand>();
         //绑定组件上的Player脚本
         this.player = transform.GetComponent<Player>();
         //绑定组件上的Check脚本
@@ -45,6 +46,7 @@ public class PlayerController : NetworkBehaviour
         }
         
         SpellSkill();
+        SpellSet();
         //判断是否进入下蹲状态
         if (IsSquat())
         {
@@ -72,19 +74,51 @@ public class PlayerController : NetworkBehaviour
         {
             player.skillSystem.PlaySkill(0, player);
         }
-        if(command.skill)
+        if(command.skill1)
         {
             player.skillSystem.PlaySkill(1, player);
         }
+        if(command.skill2)
+        {
+            player.skillSystem.PlaySkill(2, player);
+        }
         
+    }
+
+    //设计为按住技能按键长时间 为拾取地上技能做辅助
+    //这里只处理按键时长 时长长于4s若用nowitem则替换对应键
+    public void SpellSet()
+    {
+        if (command.skill1set || command.skill2set)
+        {
+            if(player.quality.skillGetTime>0)
+            {
+                player.quality.skillGetTime -= Time.deltaTime;
+            }
+            else
+            {
+                if (command.skill1set)
+                {
+                    player.SkillSystemSetSkill(1);
+                }
+                else
+                {
+                    player.SkillSystemSetSkill(2);
+                }
+            }
+        }
+        else
+        {
+            player.quality.skillGetTime = 4;
+        }
     }
 
     //基础控制方面 在服务器端完成移动的数据处理
     public void CmdMove()
     {
-        //更新Launcher的转动角度
-        player.Launcher.rotation = new Quaternion(command.horizontal, command.vertical, 0,0);
-        
+        //改为更新player脚本下记录direction方向 模1化
+        player.direction = new Vector2(command.horizontal, command.vertical).normalized;
+
         if (rb != null)
         {
             float h = 0f;
@@ -111,13 +145,14 @@ public class PlayerController : NetworkBehaviour
             //如果脚下有东西
             if (playerCheck.ground)
             {
-                //在下蹲情况下 再按跳跃为向下方翻移
+                //在下蹲情况下 再按跳跃为向下方翻移 此外加一个向下的力来模拟一个摩擦阻力
                 if (player.isSquatting)
                 {
                     if (command.jump)
                     {
-                        StartCoroutine(Pnetrate(0.5f));
+                        StartCoroutine(Pnetrate(0.4f));
                     }
+                    rb.AddForce(new Vector2(0, -10f));
                 }
                 //若不是下蹲情况 则发生跳跃
                 else
@@ -135,7 +170,7 @@ public class PlayerController : NetworkBehaviour
             {
                 if(playerCheck.top)
                 {
-                    StartCoroutine(Pnetrate(0.5f));
+                    StartCoroutine(Pnetrate(0.4f));
                 }
                 //如果右边有东西 注意这个下滑力太小有可能没有效果 被水平力抵消
                 if (playerCheck.front)
@@ -188,13 +223,23 @@ public class PlayerController : NetworkBehaviour
      */
     private void Flip()
     {
-        player.isFacingRight = !player.isFacingRight;
-        Vector3 innerScale = player.transform.localScale;
-        innerScale.x *= -1;
-        player.transform.localScale = innerScale;
 
-        Vector3 MaskScale = player.transform.Find("Mask").localScale;
-        MaskScale.x *= -1;
-        player.transform.Find("Mask").localScale = MaskScale;
+        player.isFacingRight = !player.isFacingRight;
+
+        Vector3 innerScale = transform.localScale;
+        Vector3 maskScale = transform.Find("Mask").localScale;
+
+        innerScale.x *= -1;
+        //有些局域坐标不应该变化
+        maskScale.x *= -1;
+
+
+        transform.localScale = innerScale;
+        transform.Find("Mask").localScale = maskScale;
+
+        //对GUI组件中recttransform进行修改
+        Vector2 guiScale= transform.Find("ControlCanvas").GetComponent<RectTransform>().localScale;
+        guiScale.x *= -1;
+        transform.Find("ControlCanvas").GetComponent<RectTransform>().localScale = guiScale;
     }
 }

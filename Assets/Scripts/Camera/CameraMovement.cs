@@ -13,7 +13,7 @@ public class CameraMovement : MonoBehaviour
 
     private void Awake()
     {
-        player = transform;
+        player = transform.parent;
         offset = transform.position - player.position;
     }
 
@@ -33,6 +33,5 @@ public class CameraMovement : MonoBehaviour
             Vector3 targetCampos = player.position + offset;
             transform.position = Vector3.Lerp(transform.position, targetCampos, smothing*Time.deltaTime);
         }
-        
     }
 }

@@ -17,7 +17,7 @@ public class Player : NetworkBehaviour
     public bool isSquatting = false;
 
     //发射器 跟子弹技能方向相关
-    public Transform Launcher = null;
+    public Vector2 direction;
     //跟游戏内容相关部分
     //角色数值 与monobehavior脱离
     public PlayerQuality quality;
@@ -30,7 +30,7 @@ public class Player : NetworkBehaviour
     {
         //跟一些游戏中的组件绑定
         //技能相关发射器绑定
-        Launcher = transform.Find("Launcher");
+        direction = new Vector2(-1, 0);
         //技能系统绑定
         skillSystem = gameObject.AddComponent<PlayerSkillSystem>();
         //封装一些角色数值的东西
@@ -46,24 +46,17 @@ public class Player : NetworkBehaviour
         if (isLocalPlayer)
         {
             transform.Find("ControlCanvas").GetComponent<Canvas>().enabled = true;
+            transform.Find("ControlCanvas").GetComponent<InputCommand>().enabled = true;
             transform.Find("Camera").GetComponent<Camera>().enabled = true;
             transform.Find("FogCamera").GetComponent<Camera>().enabled = true;
+            transform.Find("Mask").GetComponent<MeshRenderer>().enabled = true;
         }
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        //捡取道具
-        if(NowItem)
-        {
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                skillSystem.SetSkill(NowItem.GetComponent<SkillItem>().skillName);
-                Destroy(NowItem.gameObject);
-                NowItem = null;
-            }
-        }
+        
         //生命值为0销毁
         if (quality.HP <= 0)
         {
@@ -86,6 +79,20 @@ public class Player : NetworkBehaviour
         if(NowItem)
         {
             NowItem = null;
+        }
+    }
+    //Controll调用设置技能
+    public void SkillSystemSetSkill(int index)
+    {
+        //捡取道具
+        if (NowItem)
+        {
+            if (quality.skillGetTime <= 0)
+            {
+                skillSystem.SetSkill(NowItem.GetComponent<SkillItem>().skillName, index);
+                Destroy(NowItem.gameObject);
+                NowItem = null;
+            }
         }
     }
 }
