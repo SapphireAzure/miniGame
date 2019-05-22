@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114610958663963228}
   m_Layer: 0
   m_Name: Item
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1993341572777196}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.17, y: 1.43, z: 0}
+  m_LocalPosition: {x: -5.639585, y: 0.5108997, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -58,7 +58,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.64, y: 0.96}
+    oldSize: {x: 0.76, y: 0.92}
     newSize: {x: 0.64, y: 0.96}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -78,7 +78,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06f6ab0f23790fc4788bf9a3d6d96709, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillName: 0
+  skillName: 2
+  HP: 100
 --- !u!212 &212534947083695236
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -113,7 +114,7 @@ SpriteRenderer:
   m_SortingLayerID: 862923081
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6a4a7a72b820b3d4a8eb5ac46014f253, type: 3}
+  m_Sprite: {fileID: 21300044, guid: 0c5384f4945b34de2abc1f298bade51f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

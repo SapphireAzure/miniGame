@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //该类放在Player下为player相关的各种属性值
+//有的起到记录有的起到约束作用
 [System.Serializable]
 public class PlayerQuality
 {
@@ -20,18 +21,29 @@ public class PlayerQuality
     public int attack;
     //角色防御力
     public int defend;
-
+    //水平受力大小
+    public float moveForce;
+    //竖直受力大小
+    public float jumpForce;
+    //角色视角大小
+    public int sightAngular;
+    //角色获得技能的速度
+    public float skillGetTime;
 
     public PlayerQuality()
     {
-        reset();
+        maxHp = 10;
+        HP = 10;
+        jumpForce = 500;
+        moveForce = 365f;
+        skillGetTime = 4;
+        sightAngular = 72;
+        PropertyReset();
     }
-    //将quality数值回复
-    public void reset()
+    //将quality数值回复 注意地形check要不断调用修改数值
+    public void PropertyReset()
     {
-        maxHp = 100;
-        HP = 100;
-        speedLevel = 1;
+        speedLevel = 1;  
         dodge = 0;
         attack = 0;
         defend = 0;

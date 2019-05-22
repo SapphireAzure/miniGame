@@ -13,9 +13,17 @@ using UnityEngine;
 public abstract class Skill : MonoBehaviour
 {
     //技能可能的共有部分
+    //技能的ID编号
+    public string ID;
+    //技能图片 （或后面可能的动画）
     public GameObject skillSprite;
+    //技能的拥有者
+    public Player owner;
     //是否为主动技能
     public bool isActive;
+    //执行技能能力
+    public abstract void PlaySkill();
 
-    public abstract void PlaySkill(Player player);
+    //被动技能触发检查
+    public abstract void SkillEffect(Transform effectSite);
 }

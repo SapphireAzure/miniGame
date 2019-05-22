@@ -1,137 +1,68 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
-    //水平受力大小
-    public float moveForce = 365f;
-    //竖直受力大小
-    public float jumpForce = 1000f;
+
     //前面的ground 将collision复位
     private RaycastHit2D formorGround;
-    //角色脚下的collider
-    private RaycastHit2D ground;
     
-    //隐藏是否面朝右边 图片默认朝向左边
+    //是否面朝右边 图片默认朝向左边
+    [SyncVar]
     public bool isFacingRight = false;
-    //隐藏是否在跳跃
-    [HideInInspector]
-    public bool CanJump = false;
-    //隐藏是否主动下落
-    public bool WillDrop = false;
+    //标记目标是否在下蹲状态
+    [SyncVar]
+    public bool isSquatting = false;
 
+    //发射器 跟子弹技能方向相关
+    public Vector2 direction;
     //跟游戏内容相关部分
-    //角色数值
+    //角色数值 与monobehavior脱离
     public PlayerQuality quality;
-    //地面检测
-    public GroundTrigger gt;
     //技能列表
-    public PlayerSkillSystem skillSystem;
-    //检测地面用射击直线
-    public Transform groundCheck;
-    //目前脚底下的Item属性
+    public PlayerSkillSystem skillSystem = null;
+    //目前碰到的Item属性
     private Collider2D NowItem;
+
+    private void Awake()
+    {
+        //跟一些游戏中的组件绑定
+        //技能相关发射器绑定
+        direction = new Vector2(-1, 0);
+        //技能系统绑定
+        skillSystem = gameObject.AddComponent<PlayerSkillSystem>();
+        //封装一些角色数值的东西
+        quality = new PlayerQuality();
+    }
 
     // Use this for initialization
     void Start ()
     {
-        groundCheck = transform.Find("GroundCheck");
-        skillSystem = gameObject.AddComponent<PlayerSkillSystem>();
-        quality = new PlayerQuality();
-        gt = new GroundTrigger(this);
-        
-	}
+        //设定子物体画布当且仅当其是LocalPlayer时才是可见的
+        //注意是在产生副本时候判定
+       
+        if (isLocalPlayer)
+        {
+            transform.Find("ControlCanvas").GetComponent<Canvas>().enabled = true;
+            transform.Find("ControlCanvas").GetComponent<InputCommand>().enabled = true;
+            transform.Find("Camera").GetComponent<Camera>().enabled = true;
+            transform.Find("FogCamera").GetComponent<Camera>().enabled = true;
+            transform.Find("Mask").GetComponent<MeshRenderer>().enabled = true;
+        }
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        ground = Physics2D.Linecast(transform.position, groundCheck.position, LayerMask.GetMask("Ground"));
-        skillSystem.Check();
-        if(ground == true)
+        
+        //生命值为0销毁
+        if (quality.HP <= 0)
         {
-            //先进行地面检测
-            gt.GroundTrig(ground);
-            //如果在跳跃过程中要无视
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                CanJump = true;
-            }
+            Destroy(gameObject);
         }
-        if(Input.GetKeyDown("j"))
-        {
-            skillSystem.PlaySkill(0,this);
-        }
-        if(Input.GetKeyDown("k"))
-        {
-            skillSystem.PlaySkill(1, this);
-        }
-        //捡取道具
-        if(NowItem)
-        {
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                skillSystem.SetSkill(NowItem.GetComponent<SkillItem>().skillName);
-                Destroy(NowItem);
-                NowItem = null;
-            }
-        }
-    }
 
-    /*
-     * 这个函数负责翻转图像
-     */
-    private void Flip()
-    {
-        isFacingRight = !isFacingRight;
-        Vector3 innerScale = transform.localScale;
-        innerScale.x *= -1;
-        transform.localScale = innerScale;
-    }
-
-    private void FixedUpdate()
-    {
-        BaseControl();
-    }
-
-    //游戏中的基础 移动控制
-    private void BaseControl()
-    {
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if(rb !=null)
-        {
-            float h = 0;
-            if (Input.GetKey("a"))
-            {
-                h = -0.1f;
-            }
-            if (Input.GetKey("d"))
-            {
-                h = 0.1f;
-            }
-            //处理速度问题 注意有正负号关系
-            if (h * rb.velocity.x < quality.GetSpeed())
-            {
-                rb.AddForce(Vector2.right * h * moveForce);
-            }
-            if (Mathf.Abs(rb.velocity.x) > quality.GetSpeed())
-            {
-                rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * quality.GetSpeed(), rb.velocity.y);
-            }
-            if (h > 0 && !isFacingRight) Flip();
-            else if (h < 0 && isFacingRight) Flip();
-            if (CanJump)
-            {
-                rb.AddForce(new Vector2(0f, jumpForce));
-                CanJump = false;
-            }
-            if (WillDrop)
-            {
-                formorGround = ground;
-                Physics2D.IgnoreCollision(this.GetComponent<Collider2D>(), ground.collider, true);
-                WillDrop = false;
-            }
-        }
     }
 
     //进入Trigger得到trigger类型
@@ -148,6 +79,20 @@ public class Player : MonoBehaviour
         if(NowItem)
         {
             NowItem = null;
+        }
+    }
+    //Controll调用设置技能
+    public void SkillSystemSetSkill(int index)
+    {
+        //捡取道具
+        if (NowItem)
+        {
+            if (quality.skillGetTime <= 0)
+            {
+                skillSystem.SetSkill(NowItem.GetComponent<SkillItem>().skillName, index);
+                Destroy(NowItem.gameObject);
+                NowItem = null;
+            }
         }
     }
 }
